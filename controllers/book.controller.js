@@ -10,7 +10,7 @@ const bookController = {
     },
     getById: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from books where book_id = $1", [req.params.id])
+            const { rows } = await postgre.query("select * from books where id = $1", [req.params.id])
 
             if (rows[0]) {
                 return res.json({msg: "OK", data: rows})
@@ -23,9 +23,9 @@ const bookController = {
     },
     create: async(req, res) => {
         try {
-            const { name } = req.body
-            const sql = 'INSERT INTO books(name) VALUES($1) RETURNING *'
-            const { rows } = await postgre.query(sql, [name])
+            const { value } = req.body
+            const sql = 'INSERT INTO books(value) VALUES($1) RETURNING *'
+            const { rows } = await postgre.query(sql, [value])
 
             res.json({msg: "OK", data: rows[0]})
 
@@ -35,11 +35,11 @@ const bookController = {
     },
     updateById: async(req, res) => {
         try {
-            const { name } = req.body
+            const { value } = req.body
 
-            const sql = 'UPDATE books set name = $1 where book_id = $2 RETURNING *'
+            const sql = 'UPDATE books set value = $1 where id = $2 RETURNING *'
 
-            const { rows } = await postgre.query(sql, [name, req.params.id])
+            const { rows } = await postgre.query(sql, [value, req.params.id])
 
             res.json({msg: "OK", data: rows[0]})
 
@@ -49,7 +49,7 @@ const bookController = {
     },
     deleteById: async(req, res) => {
         try {
-            const sql = 'DELETE FROM books where book_id = $1 RETURNING *'
+            const sql = 'DELETE FROM books where id = $1 RETURNING *'
 
             const { rows } = await postgre.query(sql, [req.params.id])
 
