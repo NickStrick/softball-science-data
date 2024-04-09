@@ -3,8 +3,20 @@ const app = express()
 
 require('dotenv').config()
 
-app.use(express.json())
+const cors = require('cors');
+const helmet = require('helmet');
 
+app.use(helmet());
+app.use(cors());
+app.use(express.json())
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+  });
 
 const bookRouter = require('./routes/book.router')
 
